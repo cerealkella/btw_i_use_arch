@@ -8,6 +8,19 @@ import configparser
 
 class Install():
     """Installer Class for btw_i_use_arch"""
+    def __init__(self):
+        self._base_user_dir = PosixPath("~/").expanduser()
+        self._email = ""
+
+    def git_config(self):
+        """
+        Configure Git Global Settings
+        """
+        git_config = f"{self._base_user_dir}/.gitconfig"
+        if git_config.exists():
+            config = configparser.ConfigParser()
+            config.read("/home/justin/.gitconfig")
+            self.email = config["user"]["email"]
 
     def ssh_keys(self):
         """Create SSH keys for Github, Gitlab or miscellaneous servers"""
@@ -16,7 +29,7 @@ class Install():
             print("Okay, adding SSH keys...")
             print("Accept the default key name unless adding multiple git services.")
             print("You'll also probably want to generate a secure passphrase for it.")
-            subprocess.run(f"ssh-keygen -t ed25519 -C {email}", shell=True)
+            subprocess.run(f"ssh-keygen -t ed25519 -C {self._email}", shell=True)
             print("Ok, cool. Now add it to gitlab / github under profile > SSH Keys.")
             print("Starting the ssh-agent...")
             subprocess.run('eval "$(ssh-agent -s)"', shell=True)
@@ -55,16 +68,6 @@ class Install():
 
     def install_vscode_exts(self):
         """Install VSCODE Extensions from vscode-extensions.txt"""
-        if input("Do you want to install VSCode Extensions? (Y/N) ").lower() == "y":
-            with open("vscode-extensions.txt") as f:
-                extensions = [line.rstrip() for line in f]
-            for ext in extensions:
-                subprocess.run(f"code --install-extension {ext}", shell=True)
-        else:
-            print("Skipping vscode extension installation.")
-
-    def install_vscode_exts(self):
-        """Install VSCODE Extensions"""
         if input("Do you want to install VSCode Extensions? (Y/N) ").lower() == "y":
             with open("vscode-extensions.txt") as f:
                 extensions = [line.rstrip() for line in f]
@@ -236,7 +239,7 @@ class Install():
             https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
             """
             print("SSH Keys make authentication for Github / Gitlab much simpler.")
-            ssh_keys()
+            self.ssh_keys()
             if input("Set up ssh-agent as a service? (Y/N) ").lower() == "y":
                 service_path = PosixPath(
                     "~/.config/systemd/user/ssh-agent.service"
@@ -284,3 +287,7 @@ class Install():
             subprocess.run("sudo systemctl start supervisord.service", shell=True)
             # enable the service so it starts on restart
             subprocess.run("sudo systemctl enable supervisord.service", shell=True)
+
+    def exit(self):
+        """Exit application!"""
+        return 0

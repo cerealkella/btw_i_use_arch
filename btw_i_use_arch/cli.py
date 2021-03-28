@@ -33,14 +33,13 @@ def main(args=None):
         options,
         # preview_command=f"Preview",
         preview_command=get_docstring,
-        multi_select=True,
+        # multi_select=True,
         show_multi_select_hint=True,
     )
     menu_entry_indices = terminal_menu.show()
     print(menu_entry_indices)
-    print(terminal_menu.chosen_menu_entries)
-    for entry in terminal_menu.chosen_menu_entries:
-        getattr(btw, entry)()
+    # print(terminal_menu.chosen_menu_entries)
+    getattr(btw, terminal_menu.chosen_menu_entry)()
     return 0
 
 
