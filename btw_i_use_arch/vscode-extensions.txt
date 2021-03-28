@@ -1,0 +1,16 @@
+adpyke.codesnap
+adpyke.vscode-sql-formatter
+batisteo.vscode-django
+eamodio-gitlens
+grapecity.gc-excelviewer
+ilich8086.Untabify
+James-Yu.latex-workshop
+jcbuisson.vue
+lextudio.restructuredtext
+ms-python.python
+peakchen90.vue-beautify
+sdras.vue-vscode-snippets
+shd101wyy.markdown-preview-enhanced
+torn4dom4n.latex-support
+njpwerner.autodocstring
+zhuangtongfa.material-theme

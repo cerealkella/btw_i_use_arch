@@ -1,0 +1,16 @@
+bitwarden
+discord
+flameshot
+google-chrome
+netextender
+python-pygame
+signal-desktop
+remmina
+remmina-plugin-rdesktop
+spotify
+ttf-meslo-nerd-font-powerlevel10k
+ttf-ms-fonts
+wine-mono
+wine-staging
+winetricks
+xclip

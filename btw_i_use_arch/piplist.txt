@@ -1,0 +1,11 @@
+rest_uploader
+cookiecutter
+jupyter
+pandas
+matplotlib
+sqlalchemy
+psycopg2
+quandl
+pylint
+flake8
+black
