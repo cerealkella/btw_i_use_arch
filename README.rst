@@ -43,7 +43,7 @@ Credits
 -------
 
 This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
-It also utilizes simple-term-menu_ by IngoMeyer441
+It also utilizes simple-term-menu_ by IngoMeyer441.
 
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
