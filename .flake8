@@ -1,0 +1,5 @@
+[flake8]
+per-file-ignores =
+    # line too long
+    btw_i_use_arch/btw_i_use_arch.py: E501,
+    btw_i_use_arch/cli.py: W605,
