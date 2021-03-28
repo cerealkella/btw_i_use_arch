@@ -12,7 +12,7 @@ class Install():
         self._base_user_dir = PosixPath("~/").expanduser()
         self._email = ""
 
-    def git_config(self):
+    def _git_config(self):
         """
         Configure Git Global Settings
         """
@@ -20,17 +20,20 @@ class Install():
         if git_config.exists():
             config = configparser.ConfigParser()
             config.read("/home/justin/.gitconfig")
-            self.email = config["user"]["email"]
+            self._email = config["user"]["email"]
 
     def ssh_keys(self):
-        """Create SSH keys for Github, Gitlab or miscellaneous servers"""
+        """
+        Create SSH keys for Github, Gitlab or miscellaneous servers
+        subprocess.run(f"ssh-keygen -t ed25519 -C {self._email}", shell=True)
+        """
         add_keys = input("Do you want to create SSH keys? (Y/N) ")
         while add_keys.lower() == "y":
             print("Okay, adding SSH keys...")
-            print("Accept the default key name unless adding multiple git services.")
-            print("You'll also probably want to generate a secure passphrase for it.")
+            print("""Accept the default key name unless
+                     adding multiple git services.""")
+            print("Best practice is to generate a secure passphrase.")
             subprocess.run(f"ssh-keygen -t ed25519 -C {self._email}", shell=True)
-            print("Ok, cool. Now add it to gitlab / github under profile > SSH Keys.")
             print("Starting the ssh-agent...")
             subprocess.run('eval "$(ssh-agent -s)"', shell=True)
             print("Adding private key to the agent...")
@@ -41,14 +44,15 @@ class Install():
                 ).lower()
                 == "y"
             ):
-                key_name = input("What did you call it? e.g. gitlab / github: ")
+                key_name = input("What did you call it? e.g. gitlab/github: ")
             subprocess.run(f"ssh-add ~/.ssh/{key_name}", shell=True)
-            print("Ok, cool. Now add it to gitlab / github under profile > SSH Keys.")
+            print("Ok. Now add it the server to which you're connecting")
+            print("For Gitlab/Github, look under profile > SSH Keys.")
             subprocess.run(
                 f"xclip -selection clipboard < ~/.ssh/{key_name}.pub", shell=True
             )
             print(
-                f"The contents of the {key_name}.pub file were copied to your clipboard"
+                f"Contents of {key_name}.pub were copied to the clipboard"
             )
             print(
                 """Go ahead and paste that into the appropriate dialog box in the web UI. If
@@ -57,14 +61,14 @@ class Install():
                 Ensure the local ~/.ssh/config file references the server properly.
                 """
             )
-            ssh_config = PosixPath("~/.ssh/config").expanduser()
+            ssh_config = "f{self._base_user_dir}/.ssh/config"
             if ssh_config.exists():
                 print("Existing .ssh/config file. Skipping this part. UPDATE MANUALLY")
             else:
                 print("Copying the ssh config file to the ~.ssh/ folder...")
                 print("You'll want to ensure the variables are set correctly!")
                 subprocess.run(f"cp config/ssh_config.conf {ssh_config}", shell=True)
-            add_keys = input("Do you want to add an additional SSH key? (Y/N) ")
+            add_keys = input("Add an additional SSH key? (Y/N) ")
 
     def install_vscode_exts(self):
         """Install VSCODE Extensions from vscode-extensions.txt"""
