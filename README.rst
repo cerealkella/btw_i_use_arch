@@ -20,7 +20,13 @@ BTW I Use Arch
 
 
 
-Helper CLI for installing packages and setting up Linux components
+Helper menu-driven CLI for installing packages and setting up Linux components on an 
+Arch-based system.
+If performing a clean install - ALWAYS RUN PACMAN SYSTEM UPDATES FIRST!
+Disclaimer: As of the initial deployment of this package,
+I have never actually tried to build myself an Arch system, so please don't
+tell me I'm a no-nothing n00b. In many respects I am, but don't tell me. :)
+Manjaro suits my needs quite nicely, and I like it with KDE.
 
 
 * Free software: MIT license
@@ -30,7 +36,8 @@ Helper CLI for installing packages and setting up Linux components
 Features
 --------
 
-* TODO
+* Menu-driven (uses simple-term-menu)
+* Update components and perform setup tasks more simply
 
 Credits
 -------
@@ -39,3 +46,4 @@ This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypack
 
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+.. _Simple Term Menu: https://github.com/IngoMeyer441/simple-term-menu
