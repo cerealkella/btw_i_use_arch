@@ -47,3 +47,5 @@ This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypack
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
 .. _Simple Term Menu: https://github.com/IngoMeyer441/simple-term-menu
+.. _`IngoMeyer441/simple-term-menu`: https://github.com/IngoMeyer441/simple-term-menu
+
