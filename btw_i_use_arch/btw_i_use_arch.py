@@ -79,9 +79,9 @@ class Install:
             add_keys = input("Add an additional SSH key? (Y/N) ")
 
     def install_vscode_exts(self):
-        """Install VSCODE Extensions from vscode-extensions.txt"""
+        """Install vscode extensions from vscode-extensions.txt"""
         if input("Do you want to install VSCode Extensions? (Y/N) ").lower() == "y":
-            with open("vscode-extensions.txt") as f:
+            with open("packages/vscode-extensions.txt") as f:
                 extensions = [line.rstrip() for line in f]
             for ext in extensions:
                 subprocess.run(f"code --install-extension {ext}", shell=True)
@@ -89,12 +89,7 @@ class Install:
             print("Skipping vscode extension installation.")
 
     def install_omz(self):
-        """
-        oh-my-zsh
-        The oh-my-zsh script switches the default
-        shell to zsh, so I believe the following line is unnecessary:
-        # "chsh -s $(which zsh)",
-        """
+        """Installs oh-my-zsh and sets zsh to default shell and copies base .zsh config file"""
         if input("Install Oh-My-Zsh? (Y/N) ").lower() == "y":
             commands = [
                 'sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"',
@@ -108,10 +103,9 @@ class Install:
             print("Skipping omz installation.")
 
     def enable_ssh(self):
-        """
-        SSH Daemon disabled by default on Manjaro Systems
-        Enable it
-        """
+        """SSH Daemon is disabled by default on Manjaro Systems. Enable it."""
+        subprocess.run("systemctl status sshd.service", shell=True)
+        print("")
         if input("Enable SSH Daemon? (Y/N) ").lower() == "y":
             commands = [
                 "sudo systemctl enable sshd.service",
@@ -123,12 +117,9 @@ class Install:
             print("Skip enabling ssh service.")
 
     def install_nvidia_nonfree(self):
-        """
-        Optionally install nonfree graphics card...
-        https://wiki.manjaro.org/index.php?title=Configure_Graphics_Cards
-        """
+        """Install NVIDIA nonfree graphics drivers https://wiki.manjaro.org/index.php?title=Configure_Graphics_Cards"""
         if (
-            input("Would you like to install the nonfree nvidia driver? (Y/N) ").lower()
+            input("Would you like to install the nonfree NVIDIA driver? (Y/N) ").lower()
             == "y"
         ):
             print("Okay, installing the nonfree graphics driver...")
@@ -138,11 +129,7 @@ class Install:
             print("Skipping nonfree driver installation.")
 
     def fix_pppd(self):
-        """
-        Optionally fix pppd permissions for NetExtender to work
-        Only necessary if planning to use SonicWall NetExtender
-        to connect to a VPN
-        """
+        """Fix pppd permissions for NetExtender to work.\nOnly necessary if planning to use SonicWall VPN"""
         if input("Are you planning to use NetExtender? (Y/N) ").lower() == "y":
             print("Okay, fixing pppd service permissions...")
             subprocess.run("sudo chmod 4755 /usr/sbin/pppd", shell=True)
@@ -150,7 +137,7 @@ class Install:
         else:
             print("Skipping pppd service permissions fix.")
 
-    def custom_steam_proton(self):
+    def steam_custom_proton(self):
         """
         Pull down the latest Steam Custom Proton version.
         Note: Will not create entire directory structure if not found, only
@@ -188,9 +175,7 @@ class Install:
             print("Skipping custom Steam Proton installation.")
 
     def install_joplin(self):
-        """
-        Run Joplin Notes installer
-        """
+        """Run Joplin Notes installer"""
         commands = [
             "wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh | bash",
         ]
@@ -198,10 +183,8 @@ class Install:
             subprocess.run(command, shell=True)
         return 0
 
-    def touchpad_gestures(self):
-        """
-        Optionally add gestures for laptop touchpads
-        """
+    def laptop_touchpad_gestures(self):
+        """Add Mac-like gestures for laptop touchpads: https://github.com/bulletmark/libinput-gestures"""
         if input("Are you planning to use touchpad gestures? (Y/N) ").lower() == "y":
             print("Okay, adding user to input group...")
             subprocess.run("sudo gpasswd -a $USER input", shell=True)
@@ -210,16 +193,12 @@ class Install:
             print("Setting libinput-gestures to automatically start...")
             subprocess.run("libinput-gestures-setup autostart", shell=True)
             subprocess.run("libinput-gestures-setup start", shell=True)
-            print(
-                "Enable gestures! ref: https://github.com/bulletmark/libinput-gestures"
-            )
+            print("Enabled gestures!")
         else:
             print("Skipping touchpad gestures.")
 
     def git_dev_setup(self):
-        """
-        Configure git
-        """
+        """Configure git"""
         if input("Do you need to set up git to do devstuff? (Y/N) ").lower() == "y":
             git_config = PosixPath("~/.gitconfig").expanduser()
             if git_config.exists():
@@ -277,8 +256,7 @@ class Install:
             print("Skipping git setup stuff.")
 
     def supervisor(self):
-        """Set up supervisor service
-        Using rest_uploader as a template"""
+        """Set up supervisor service using rest_uploader as a template"""
         if input("Set up rest_uploader as a supervisor service? (Y/N) ").lower() == "y":
             print("rest_uploader is the service which will auto-upload files to Joplin")
             print("Requires the following:")

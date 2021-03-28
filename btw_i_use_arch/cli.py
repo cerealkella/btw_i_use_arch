@@ -29,6 +29,7 @@ def main(args=None):
     click.echo("Let's install some stuff!")
     btw = Install()
     options = [f for f in dir(btw) if not f.startswith("_")]
+    options.sort()
     terminal_menu = TerminalMenu(
         options,
         # preview_command=f"Preview",
