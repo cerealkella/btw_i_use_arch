@@ -26,7 +26,7 @@ def main(args=None):
     click.echo("computer, what year is it?")
     click.echo(f"> Beep boop. {date.today().year}.")
     click.echo(f"{date.today().year} is the year of the Linux Desktop!")
-    click.echo("Let's install some stuff!")
+    click.echo("Let's install/configure some stuff!")
     btw = Install()
     options = [f for f in dir(btw) if not f.startswith("_")]
     options.sort()
@@ -37,8 +37,7 @@ def main(args=None):
         # multi_select=True,
         show_multi_select_hint=True,
     )
-    menu_entry_indices = terminal_menu.show()
-    print(menu_entry_indices)
+    terminal_menu.show()
     # print(terminal_menu.chosen_menu_entries)
     getattr(btw, terminal_menu.chosen_menu_entry)()
     return 0

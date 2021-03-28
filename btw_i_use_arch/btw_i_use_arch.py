@@ -28,10 +28,7 @@ class Install:
             return False
 
     def ssh_keys(self):
-        """
-        Create SSH keys for Github, Gitlab or miscellaneous servers
-        subprocess.run(f"ssh-keygen -t ed25519 -C {self._email}", shell=True)
-        """
+        """Create SSH keys for Github, Gitlab or miscellaneous servers \nsubprocess.run(f"ssh-keygen -t ed25519 -C {self._email}", shell=True)"""
         add_keys = input("Do you want to create SSH keys? (Y/N) ")
         while add_keys.lower() == "y":
             print("Okay, adding SSH keys...")
@@ -138,8 +135,8 @@ class Install:
             print("Skipping pppd service permissions fix.")
 
     def steam_custom_proton(self):
+        """Pull down the latest Steam Custom Proton version."""
         """
-        Pull down the latest Steam Custom Proton version.
         Note: Will not create entire directory structure if not found, only
         the "compatibilitytools.d" subdirectory. Ensure proper directory
         structure is in place prior to running.
@@ -278,6 +275,6 @@ class Install:
             # enable the service so it starts on restart
             subprocess.run("sudo systemctl enable supervisord.service", shell=True)
 
-    def exit(self):
+    def x_exit(self):
         """Exit application!"""
         return 0
