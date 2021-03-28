@@ -6,7 +6,7 @@ import pytest
 
 from click.testing import CliRunner
 
-from btw_i_use_arch import btw_i_use_arch # noqa
+from btw_i_use_arch import btw_i_use_arch  # noqa
 from btw_i_use_arch import cli
 
 

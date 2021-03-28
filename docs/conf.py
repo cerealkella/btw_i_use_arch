@@ -22,7 +22,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath(".."))
 
-import btw_i_use_arch # noqa
+import btw_i_use_arch  # noqa
 
 # -- General configuration ---------------------------------------------
 
