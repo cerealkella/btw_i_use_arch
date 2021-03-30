@@ -92,11 +92,11 @@ class Install:
 
     def Install_Pacman_Packages(self):
         """Install a whole lotta stuff using pacman. Run updates first!"""
-        return (subprocess.run(f"pacman -S - < packages/pkglist.txt", shell=True)).returncode
+        return (subprocess.run(f"sudo pacman -S - < packages/pkglist.txt --needed", shell=True)).returncode
 
     def Install_Yay_Packages(self):
         """Install a whole lotta stuff using yay. Run the Pacman one first!"""
-        return (subprocess.run(f"yay -S - < packages/yaylist.txt", shell=True)).returncode
+        return (subprocess.run(f"yay -S - < packages/yaylist.txt --needed", shell=True)).returncode
 
     def install_omz(self):
         """Installs oh-my-zsh and sets zsh to default shell and copies base .zsh config file"""
@@ -111,6 +111,16 @@ class Install:
             shutil.copyfile(src="config/.zshrc", dst=f"{self._base_user_dir}/.zshrc")
         else:
             print("Skipping omz installation.")
+    
+    def vscode_config(self):
+        """Changes theme and terminal for Code - OSS"""
+        destination = f"{self._base_user_dir}/.config/Code - OSS/User/settings.json"
+        shutil.copyfile(src="config/code-settings.json", dst=destination)
+
+    def konsole_config(self):
+        """Changes font for Konsole Terminal Theme"""
+        destination = f"{self._base_user_dir}/.local/share/konsole/Breath2.profile"
+        shutil.copyfile(src="config/konsole.conf", dst=destination)
 
     def enable_ssh(self):
         """SSH Daemon is disabled by default on Manjaro Systems. Enable it."""
