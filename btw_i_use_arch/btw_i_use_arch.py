@@ -1,5 +1,6 @@
 import subprocess
 import os
+import shutil
 from pathlib import PosixPath
 import wget
 import tarfile
@@ -72,7 +73,7 @@ class Install:
             else:
                 print("Copying the ssh config file to the ~.ssh/ folder...")
                 print("You'll want to ensure the variables are set correctly!")
-                subprocess.run(f"cp config/ssh_config.conf {ssh_config}", shell=True)
+                shutil.copyfile(src="config/ssh_config.conf", dst=ssh_config)
             add_keys = input("Add an additional SSH key? (Y/N) ")
 
     def install_vscode_exts(self):
@@ -85,6 +86,18 @@ class Install:
         else:
             print("Skipping vscode extension installation.")
 
+    def Install_System_Updates(self):
+        """Install OS Updates using pacman. Run these first!"""
+        return (subprocess.run(f"sudo pacman -Syyu", shell=True)).returncode
+
+    def Install_Pacman_Packages(self):
+        """Install a whole lotta stuff using pacman. Run updates first!"""
+        return (subprocess.run(f"pacman -S - < packages/pkglist.txt", shell=True)).returncode
+
+    def Install_Yay_Packages(self):
+        """Install a whole lotta stuff using yay. Run the Pacman one first!"""
+        return (subprocess.run(f"yay -S - < packages/yaylist.txt", shell=True)).returncode
+
     def install_omz(self):
         """Installs oh-my-zsh and sets zsh to default shell and copies base .zsh config file"""
         if input("Install Oh-My-Zsh? (Y/N) ").lower() == "y":
@@ -92,10 +105,10 @@ class Install:
                 'sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"',
                 "git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions",
                 "git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting",
-                "cp config/.zshrc $HOME/.zshrc",
             ]
             for command in commands:
                 subprocess.run(command, shell=True)
+            shutil.copyfile(src="config/.zshrc", dst=f"{self._base_user_dir}/.zshrc")
         else:
             print("Skipping omz installation.")
 
@@ -186,7 +199,8 @@ class Install:
             print("Okay, adding user to input group...")
             subprocess.run("sudo gpasswd -a $USER input", shell=True)
             print("Copying config file...")
-            subprocess.run("cp config/libinput-gestures.conf $HOME/.config", shell=True)
+            # subprocess.run("cp config/libinput-gestures.conf $HOME/.config", shell=True)
+            shutil.copyfile(src="config/libinput-gestures.conf", dst=f"{self._base_user_dir}/.config/libinput-gestures.conf")
             print("Setting libinput-gestures to automatically start...")
             subprocess.run("libinput-gestures-setup autostart", shell=True)
             subprocess.run("libinput-gestures-setup start", shell=True)
@@ -232,10 +246,8 @@ class Install:
                 service_path = PosixPath(
                     "~/.config/systemd/user/ssh-agent.service"
                 ).expanduser()
-                subprocess.run(
-                    f"cp config/ssh-agent.conf {service_path}",
-                    shell=True,
-                )
+                # subprocess.run(f"cp config/ssh-agent.conf {service_path}",shell=True,)
+                shutil.copyfile(src="config/ssh-agent.conf", dst={service_path})
                 # SSH Agent Socket
                 # https://stackoverflow.com/questions/18880024/start-ssh-agent-on-login
                 zshrc = PosixPath("~/.zshrc").expanduser()
