@@ -28,7 +28,7 @@ class Install:
             print("Run Git Dev Setup!")
             return False
 
-    def ssh_keys(self):
+    def SSH_Keys(self):
         """Create SSH keys for Github, Gitlab or miscellaneous servers \nsubprocess.run(f"ssh-keygen -t ed25519 -C {self._email}", shell=True)"""
         add_keys = input("Do you want to create SSH keys? (Y/N) ")
         while add_keys.lower() == "y":
@@ -75,8 +75,9 @@ class Install:
                 print("You'll want to ensure the variables are set correctly!")
                 shutil.copyfile(src="config/ssh_config.conf", dst=ssh_config)
             add_keys = input("Add an additional SSH key? (Y/N) ")
+        return 0
 
-    def install_vscode_exts(self):
+    def Install_VSCode_Extensions(self):
         """Install vscode extensions from vscode-extensions.txt"""
         if input("Do you want to install VSCode Extensions? (Y/N) ").lower() == "y":
             with open("packages/vscode-extensions.txt") as f:
@@ -85,8 +86,9 @@ class Install:
                 subprocess.run(f"code --install-extension {ext}", shell=True)
         else:
             print("Skipping vscode extension installation.")
+        return 0
 
-    def Install_System_Updates(self):
+    def First_Install_System_Updates(self):
         """Install OS Updates using pacman. Run these first!"""
         return (subprocess.run(f"sudo pacman -Syyu", shell=True)).returncode
 
@@ -98,31 +100,31 @@ class Install:
         """Install a whole lotta stuff using yay. Run the Pacman one first!"""
         return (subprocess.run(f"yay -S - < packages/yaylist.txt --needed", shell=True)).returncode
 
-    def install_omz(self):
+    def Install_Oh_My_ZSH(self):
         """Installs oh-my-zsh and sets zsh to default shell and copies base .zsh config file"""
-        if input("Install Oh-My-Zsh? (Y/N) ").lower() == "y":
-            commands = [
-                'sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"',
-                "git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions",
-                "git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting",
-            ]
-            for command in commands:
-                subprocess.run(command, shell=True)
-            shutil.copyfile(src="config/.zshrc", dst=f"{self._base_user_dir}/.zshrc")
-        else:
-            print("Skipping omz installation.")
+        commands = [
+            'sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"',
+            "git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions",
+            "git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting",
+        ]
+        for command in commands:
+            subprocess.run(command, shell=True)
+        shutil.copyfile(src="config/.zshrc", dst=f"{self._base_user_dir}/.zshrc")
+        return 0
 
-    def vscode_config(self):
+    def VSCode_Theme_Set(self):
         """Changes theme and terminal for Code - OSS"""
         destination = f"{self._base_user_dir}/.config/Code - OSS/User/settings.json"
         shutil.copyfile(src="config/code-settings.json", dst=destination)
+        return 0
 
-    def konsole_config(self):
+    def Konsole_Theme_Set(self):
         """Changes font for Konsole Terminal Theme"""
         destination = f"{self._base_user_dir}/.local/share/konsole/Breath2.profile"
         shutil.copyfile(src="config/konsole.conf", dst=destination)
+        return 0
 
-    def enable_ssh(self):
+    def SSH_Service_Daemon_Enable(self):
         """SSH Daemon is disabled by default on Manjaro Systems. Enable it."""
         subprocess.run("systemctl status sshd.service", shell=True)
         print("")
@@ -135,11 +137,12 @@ class Install:
                 subprocess.run(command, shell=True)
         else:
             print("Skip enabling ssh service.")
+        return 0
 
-    def install_nvidia_nonfree(self):
+    def Install_Video_Drivers_NVIDIA_Nonfree(self):
         """Install NVIDIA nonfree graphics drivers https://wiki.manjaro.org/index.php?title=Configure_Graphics_Cards"""
         if (
-            input("Would you like to install the nonfree NVIDIA driver? (Y/N) ").lower()
+            input("This will install the nonfree NVIDIA driver. Continue? (Y/N) ").lower()
             == "y"
         ):
             print("Okay, installing the nonfree graphics driver...")
@@ -147,8 +150,9 @@ class Install:
             print("You'll want to reboot for this to take effect")
         else:
             print("Skipping nonfree driver installation.")
+        return 0
 
-    def fix_pppd(self):
+    def NetExtender_PPPD_Fix(self):
         """Fix pppd permissions for NetExtender to work.\nOnly necessary if planning to use SonicWall VPN"""
         if input("Are you planning to use NetExtender? (Y/N) ").lower() == "y":
             print("Okay, fixing pppd service permissions...")
@@ -156,8 +160,9 @@ class Install:
             print("Fixed 'em - NetExtender should work now")
         else:
             print("Skipping pppd service permissions fix.")
+        return 0
 
-    def steam_custom_proton(self):
+    def Steam_Custom_Proton(self):
         """Pull down the latest Steam Custom Proton version."""
         """
         Note: Will not create entire directory structure if not found, only
@@ -170,31 +175,24 @@ class Install:
         https://github.com/GloriousEggroll/proton-ge-custom/releases/latest
         """
         print(
-            """This modules installs a custom version [5.21-GE-1] of Proton for Steam.
+            """This module installs a custom version [5.21-GE-1] of Proton for Steam.
                 It requires that you have logged into steam at least once to build the
                 directory structure. Choose 'N' if you haven't logged in yet. """
         )
-        if (
-            input(
-                "Do you want to install a custom Proton version for Steam (Y/N) "
-            ).lower()
-            == "y"
-        ):
-            tarball = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/5.21-GE-1/Proton-5.21-GE-1.tar.gz"
-            filename = wget.download(tarball)
-            proton_path = PosixPath("~/.steam/root/compatibilitytools.d").expanduser()
-            if proton_path.exists():
-                pass
-            else:
-                proton_path.mkdir()
-            tar = tarfile.open(filename)
-            tar.extractall(path=proton_path)
-            os.remove(filename)
-            return True
+        tarball = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/5.21-GE-1/Proton-5.21-GE-1.tar.gz"
+        filename = wget.download(tarball)
+        proton_path = PosixPath("~/.steam/root/compatibilitytools.d").expanduser()
+        if proton_path.exists():
+            pass
         else:
-            print("Skipping custom Steam Proton installation.")
+            proton_path.mkdir()
+        tar = tarfile.open(filename)
+        tar.extractall(path=proton_path)
+        os.remove(filename)
+        return 0
+    
 
-    def install_joplin(self):
+    def Joplin_Installation(self):
         """Run Joplin Notes installer"""
         commands = [
             "wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh | bash",
@@ -203,7 +201,7 @@ class Install:
             subprocess.run(command, shell=True)
         return 0
 
-    def laptop_touchpad_gestures(self):
+    def Laptop_Touchpad_Gestures(self):
         """Add Mac-like gestures for laptop touchpads: https://github.com/bulletmark/libinput-gestures"""
         if input("Are you planning to use touchpad gestures? (Y/N) ").lower() == "y":
             print("Okay, adding user to input group...")
@@ -217,8 +215,9 @@ class Install:
             print("Enabled gestures!")
         else:
             print("Skipping touchpad gestures.")
+        return 0
 
-    def git_dev_setup(self):
+    def Setup_Git_for_Dev(self):
         """Configure git"""
         if input("Do you need to set up git to do devstuff? (Y/N) ").lower() == "y":
             git_config = PosixPath("~/.gitconfig").expanduser()
@@ -251,12 +250,11 @@ class Install:
             https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
             """
             print("SSH Keys make authentication for Github / Gitlab much simpler.")
-            self.ssh_keys()
+            self.SSH_Keys()
             if input("Set up ssh-agent as a service? (Y/N) ").lower() == "y":
                 service_path = PosixPath(
                     "~/.config/systemd/user/ssh-agent.service"
                 ).expanduser()
-                # subprocess.run(f"cp config/ssh-agent.conf {service_path}",shell=True,)
                 shutil.copyfile(src="config/ssh-agent.conf", dst={service_path})
                 # SSH Agent Socket
                 # https://stackoverflow.com/questions/18880024/start-ssh-agent-on-login
@@ -273,8 +271,9 @@ class Install:
             print("E.g. git clone git@gitlab:cerealkella/app-installer")
         else:
             print("Skipping git setup stuff.")
+        return 0
 
-    def supervisor(self):
+    def Supervisor_Setup(self):
         """Set up supervisor service using rest_uploader as a template"""
         if input("Set up rest_uploader as a supervisor service? (Y/N) ").lower() == "y":
             print("rest_uploader is the service which will auto-upload files to Joplin")
@@ -296,6 +295,7 @@ class Install:
             subprocess.run("sudo systemctl start supervisord.service", shell=True)
             # enable the service so it starts on restart
             subprocess.run("sudo systemctl enable supervisord.service", shell=True)
+        return 0
 
     def Stop_Firefox_From_Trying_to_Remember_Passwords(self):
         """Make Firefox stop trying to remember passwords. Bitwarden handles those!"""
