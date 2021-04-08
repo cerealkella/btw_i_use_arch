@@ -297,6 +297,17 @@ class Install:
             # enable the service so it starts on restart
             subprocess.run("sudo systemctl enable supervisord.service", shell=True)
 
-    def x_exit(self):
+    def Stop_Firefox_From_Trying_to_Remember_Passwords(self):
+        """Make Firefox stop trying to remember passwords. Bitwarden handles those!"""
+        destination_folder = f"{self._base_user_dir}/.mozilla/firefox/"
+        dirs = next(os.walk(destination_folder))[1]
+        for d in dirs:
+            if "default-release" in d:
+                destination = f"{destination_folder}/{d}/user.js"
+        shutil.copyfile(src="config/firefox-user.js", dst=destination)
+        print(f"Copied user.js to {destination}")
+        return 0
+
+    def eXit(self):
         """Exit application!"""
         return -1
