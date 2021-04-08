@@ -190,7 +190,6 @@ class Install:
         tar.extractall(path=proton_path)
         os.remove(filename)
         return 0
-    
 
     def Joplin_Installation(self):
         """Run Joplin Notes installer"""
