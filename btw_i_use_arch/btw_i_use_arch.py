@@ -111,7 +111,7 @@ class Install:
             shutil.copyfile(src="config/.zshrc", dst=f"{self._base_user_dir}/.zshrc")
         else:
             print("Skipping omz installation.")
-    
+
     def vscode_config(self):
         """Changes theme and terminal for Code - OSS"""
         destination = f"{self._base_user_dir}/.config/Code - OSS/User/settings.json"
@@ -299,4 +299,4 @@ class Install:
 
     def x_exit(self):
         """Exit application!"""
-        return 0
+        return -1

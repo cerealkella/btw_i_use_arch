@@ -30,16 +30,22 @@ def main(args=None):
     btw = Install()
     options = [f for f in dir(btw) if not f.startswith("_")]
     options.sort()
-    terminal_menu = TerminalMenu(
-        options,
-        # preview_command=f"Preview",
-        preview_command=get_docstring,
-        # multi_select=True,
-        show_multi_select_hint=True,
-    )
-    terminal_menu.show()
-    # print(terminal_menu.chosen_menu_entries)
-    getattr(btw, terminal_menu.chosen_menu_entry)()
+    do_stuff = True
+    while do_stuff:
+        terminal_menu = TerminalMenu(
+            options,
+            # preview_command=f"Preview",
+            preview_command=get_docstring,
+            # multi_select=True,
+            show_multi_select_hint=True,
+        )
+        terminal_menu.show()
+        if getattr(btw, terminal_menu.chosen_menu_entry)() == -1:
+            break
+        print("Configure/install more stuff?")
+        terminal_menu = TerminalMenu(['Yes', 'No'])
+        terminal_menu.show()
+        do_stuff = terminal_menu.chosen_menu_entry == 'Yes'
     return 0
 
 
