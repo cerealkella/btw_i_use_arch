@@ -90,15 +90,15 @@ class Install:
 
     def First_Install_System_Updates(self):
         """Install OS Updates using pacman. Run these first!"""
-        return (subprocess.run(f"sudo pacman -Syyu", shell=True)).returncode
+        return (subprocess.run("sudo pacman -Syyu", shell=True)).returncode
 
     def Install_Pacman_Packages(self):
         """Install a whole lotta stuff using pacman. Run updates first!"""
-        return (subprocess.run(f"sudo pacman -S - < packages/pkglist.txt --needed", shell=True)).returncode
+        return (subprocess.run("sudo pacman -S - < packages/pkglist.txt --needed", shell=True)).returncode
 
     def Install_Yay_Packages(self):
         """Install a whole lotta stuff using yay. Run the Pacman one first!"""
-        return (subprocess.run(f"yay -S - < packages/yaylist.txt --needed", shell=True)).returncode
+        return (subprocess.run("yay -S - < packages/yaylist.txt --needed", shell=True)).returncode
 
     def Install_Oh_My_ZSH(self):
         """Installs oh-my-zsh and sets zsh to default shell and copies base .zsh config file"""
