@@ -109,9 +109,12 @@ class Install:
         ]
         for command in commands:
             subprocess.run(command, shell=True)
+        print("Copying .zshrc to base user home folder...")
         shutil.copyfile(src="config/.zshrc", dst=f"{self._base_user_dir}/.zshrc")
         aliases = "aliases.zsh"
+        print("Copying custom alias file to .oh-my-zsh/custom...")
         shutil.copyfile(src=f"config/{aliases}", dst=f"{self._base_user_dir}/.oh-my-zsh/custom/{aliases}")
+        print("Done!")
         return 0
 
     def VSCode_Theme_Set(self):
