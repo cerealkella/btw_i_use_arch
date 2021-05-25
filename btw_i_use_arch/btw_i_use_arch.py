@@ -259,7 +259,9 @@ class Install:
                 service_path = PosixPath(
                     "~/.config/systemd/user/ssh-agent.service"
                 ).expanduser()
-                shutil.copyfile(src="config/ssh-agent.conf", dst={service_path})
+                if not service_path.parent.is_dir():
+                    service_path.parent.mkdir(parents=True)
+                shutil.copyfile(src="config/ssh-agent.conf", dst=f"{service_path}")
                 # SSH Agent Socket
                 # https://stackoverflow.com/questions/18880024/start-ssh-agent-on-login
                 zshrc = PosixPath("~/.zshrc").expanduser()
@@ -272,7 +274,7 @@ class Install:
                 subprocess.run("systemctl --user start ssh-agent", shell=True)
                 print("Done configuring ssh-agent!")
             print("Clone repos using ssh now!")
-            print("E.g. git clone git@gitlab:cerealkella/app-installer")
+            print("E.g. git clone git@github:kellerjustin/btw_i_use_arch")
         else:
             print("Skipping git setup stuff.")
         return 0
