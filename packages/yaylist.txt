@@ -3,8 +3,11 @@ discord
 flameshot
 google-chrome
 netextender
+obs-studio
 python-pygame
 signal-desktop
+simple-scan
+rdesktop
 remmina
 remmina-plugin-rdesktop
 spotify
