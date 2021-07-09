@@ -1,5 +1,4 @@
 adpyke.codesnap
-adpyke.vscode-sql-formatter
 batisteo.vscode-django
 eamodio-gitlens
 grapecity.gc-excelviewer
@@ -8,6 +7,9 @@ James-Yu.latex-workshop
 jcbuisson.vue
 lextudio.restructuredtext
 ms-python.python
+mxtr.sqltools
+mxtr.sqltools-driver-pg
+mxtr.sqltools-driver-sqlite
 peakchen90.vue-beautify
 sdras.vue-vscode-snippets
 shd101wyy.markdown-preview-enhanced
