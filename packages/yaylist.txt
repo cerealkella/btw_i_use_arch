@@ -2,6 +2,7 @@ bitwarden
 discord
 flameshot
 google-chrome
+neofetch
 netextender
 obs-studio
 python-pygame
