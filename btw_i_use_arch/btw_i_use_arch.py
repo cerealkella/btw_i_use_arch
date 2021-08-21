@@ -319,7 +319,7 @@ class Install:
 
     def VirtualBox_Installation(self):
         """Optional Installation of VirtualBox, make sure kernel matches!"""
-        subprocess.run("yay -S linux510-virtualbox-host-modlues virtualbox virtualbox-ext-oracle", shell=True)
+        subprocess.run("yay -S linux510-virtualbox-host-modules virtualbox virtualbox-ext-oracle", shell=True)
         subprocess.run("sudo gpasswd -a $USER vboxusers", shell=True)
         print("Reboot for the changes to take effect!")
         return 0
