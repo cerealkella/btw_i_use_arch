@@ -185,9 +185,9 @@ class Install:
         print(
             """This module installs a custom version [5.21-GE-1] of Proton for Steam.
                 It requires that you have logged into steam at least once to build the
-                directory structure. Choose 'N' if you haven't logged in yet. """
+                directory structure. Hit Ctrl+C if you haven't logged in yet. """
         )
-        tarball = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.9-GE-1/Proton-6.9-GE-1.tar.gz"
+        tarball = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.15-GE-2/Proton-6.15-GE-2.tar.gz"
         filename = wget.download(tarball)
         proton_path = PosixPath("~/.steam/root/compatibilitytools.d").expanduser()
         if proton_path.exists():
