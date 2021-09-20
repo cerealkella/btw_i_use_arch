@@ -92,13 +92,9 @@ class Install:
         """Install OS Updates using pacman. Run these first!"""
         return (subprocess.run("sudo pacman -Syyu", shell=True)).returncode
 
-    def Install_Pacman_Packages(self):
-        """Install a whole lotta stuff using pacman. Run updates first!"""
-        return (subprocess.run("sudo pacman -S - < packages/pkglist.txt --needed", shell=True)).returncode
-
-    def Install_Yay_Packages(self):
-        """Install a whole lotta stuff using yay. Run the Pacman one first!"""
-        return (subprocess.run("yay -S - < packages/yaylist.txt --needed", shell=True)).returncode
+    def Install_Packages(self):
+        """Install a whole lotta stuff using yay. Ensure yay is installed! (https://www.tecmint.com/install-yay-aur-helper-in-arch-linux-and-manjaro/)"""
+        return (subprocess.run("yay -S - < packages/pkglist.txt --needed", shell=True)).returncode
 
     def Install_Oh_My_ZSH(self):
         """Installs oh-my-zsh and sets zsh to default shell and copies base .zsh config file"""
@@ -133,7 +129,7 @@ class Install:
         return 0
 
     def SSH_Service_Daemon_Enable(self):
-        """SSH Daemon is disabled by default on Manjaro Systems. Enable it."""
+        """SSH Daemon is disabled by default on Arch-based Systems. Enable it."""
         subprocess.run("systemctl status sshd.service", shell=True)
         print("")
         if input("Enable SSH Daemon? (Y/N) ").lower() == "y":
@@ -148,7 +144,7 @@ class Install:
         return 0
 
     def Install_Video_Drivers_NVIDIA_Nonfree(self):
-        """Install NVIDIA nonfree graphics drivers https://wiki.manjaro.org/index.php?title=Configure_Graphics_Cards"""
+        """(Manjaro) Install NVIDIA nonfree graphics drivers https://wiki.manjaro.org/index.php?title=Configure_Graphics_Cards"""
         if (
             input("This will install the nonfree NVIDIA driver. Continue? (Y/N) ").lower()
             == "y"
