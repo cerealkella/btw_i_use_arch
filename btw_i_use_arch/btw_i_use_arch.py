@@ -96,6 +96,15 @@ class Install:
         """Install a whole lotta stuff using yay. Ensure yay is installed! (https://www.tecmint.com/install-yay-aur-helper-in-arch-linux-and-manjaro/)"""
         return (subprocess.run("yay -S - < packages/pkglist.txt --needed", shell=True)).returncode
 
+    def ZSH_Config_File_Deploy(self):
+        custom_files = ["aliases.zsh", "environment.zsh"]
+        for cf in custom_files:
+            print(f"Copying custom file {cf} to .oh-my-zsh/custom...")
+            shutil.copyfile(src=f"config/{cf}", dst=f"{self._base_user_dir}/.oh-my-zsh/custom/{cf}")
+        print("Done!")
+        print("Manual edits may be necessary for the custom files to be useful!")
+        return 0
+
     def Install_Oh_My_ZSH(self):
         """Installs oh-my-zsh and sets zsh to default shell and copies base .zsh config file"""
         commands = [
@@ -108,12 +117,7 @@ class Install:
             subprocess.run(command, shell=True)
         print("Copying .zshrc to base user home folder...")
         shutil.copyfile(src="config/.zshrc", dst=f"{self._base_user_dir}/.zshrc")
-        custom_files = ["aliases.zsh", "environment.zsh"]
-        for cf in custom_files:
-            print(f"Copying custom file {cf} to .oh-my-zsh/custom...")
-            shutil.copyfile(src=f"config/{cf}", dst=f"{self._base_user_dir}/.oh-my-zsh/custom/{cf}")
-        print("Done!")
-        print("Manual edits may be necessary for the custom files to be useful!")
+        self.ZSH_Config_File_Deploy()
         return 0
 
     def VSCode_Theme_Set(self):
