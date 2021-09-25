@@ -66,6 +66,7 @@ ttf-font-logos
 ttf-meslo-nerd-font-powerlevel10k
 ttf-ms-fonts
 virt-viewer
+wget
 wine-mono
 wine-staging
 winetricks
