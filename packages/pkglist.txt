@@ -4,6 +4,7 @@ base-devel
 bash-completion
 bitwarden
 bitwarden-cli
+chromedriver
 code
 cura
 dbeaver
