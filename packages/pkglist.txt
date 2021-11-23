@@ -4,7 +4,6 @@ base-devel
 bash-completion
 bitwarden
 bitwarden-cli
-chromedriver
 code
 cura
 dbeaver
@@ -13,6 +12,7 @@ etcher
 firefox
 firefox-extension-bitwarden
 flameshot
+geckodriver
 gimp
 git
 gnucash
@@ -35,6 +35,7 @@ neofetch
 netextender
 nextcloud-client
 nodejs
+nomacs
 obs-studio
 openssh
 pandoc
