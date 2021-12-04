@@ -10,7 +10,9 @@ dbeaver
 discord
 etcher
 firefox
+firefox-dark-reader
 firefox-extension-bitwarden
+firefox-ublock-origin
 flameshot
 geckodriver
 gimp
@@ -59,6 +61,7 @@ supervisor
 tesseract
 tesseract-data-eng
 texlive-core
+texlive-latexextra
 tk
 traceroute
 ttf-caladea
