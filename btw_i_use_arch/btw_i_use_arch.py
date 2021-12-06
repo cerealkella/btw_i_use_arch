@@ -2,9 +2,9 @@ import subprocess
 import os
 import shutil
 from pathlib import PosixPath
-import wget
 import tarfile
 import configparser
+from .downloader import get_latest_release_tarball, download_file
 
 
 class Install:
@@ -182,13 +182,14 @@ class Install:
         Latest Version:
         https://github.com/GloriousEggroll/proton-ge-custom/releases/latest
         """
+        proton_url = "https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases/latest"
         print(
-            """This module installs a custom version [5.21-GE-1] of Proton for Steam.
+            """This module installs the latest version of Proton for Steam.
                 It requires that you have logged into steam at least once to build the
                 directory structure. Hit Ctrl+C if you haven't logged in yet. """
         )
-        tarball = "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/6.15-GE-2/Proton-6.15-GE-2.tar.gz"
-        filename = wget.download(tarball)
+        tarball = get_latest_release_tarball(proton_url)
+        filename = download_file(tarball)
         proton_path = PosixPath("~/.steam/root/compatibilitytools.d").expanduser()
         if proton_path.exists():
             pass
