@@ -15,7 +15,7 @@ def main(args=None):
     """Console script for btw_i_use_arch."""
     click.echo(
         """
-    ( "BTW I use Arch. Er, well, actually Manjaro KDE." )
+    ( "BTW I use Arch" )
         o   ^__^
          o  (oo)\_______
             (__)\       )\/

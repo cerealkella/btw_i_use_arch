@@ -7,6 +7,7 @@ James-Yu.latex-workshop
 jcbuisson.vue
 lextudio.restructuredtext
 ms-python.python
+ms-toolsai.jupyter
 mxtr.sqltools
 mxtr.sqltools-driver-pg
 mxtr.sqltools-driver-sqlite
