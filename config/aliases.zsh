@@ -4,6 +4,9 @@ alias updoots="yay -Syyu"
 # Source Reload
 alias sourcemyshit="source ~/.zshrc"
 
+# Direnv Initialize
+alias dirinit="echo 'layout python' > .envrc && direnv allow && echo '\n# direnv \n.direnv/' >> .gitignore"
+
 # RDP
 alias rdp="xfreerdp /v:$RDP_HOST /u:$DOMAIN_USERNAME /d:$DOMAIN /p:$(bw get password 6c5f769f-b631-43a6-825d-a9bc014e7c96) /f"
 
