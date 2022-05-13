@@ -33,8 +33,19 @@ class WardenMyBits:
         else:
             print("Valid symlink, not removing!")
 
+    def unlocked(self):
+        unlock_check = ["bw", "sync"]
+        if (
+            run(unlock_check, capture_output=True).stdout.decode("utf-8")
+            == "Syncing complete."
+        ):
+            return True
+        else:
+            return False
+
     def set_bw_session(self):
         """Sets the BW_SESSION Environment variable via the zsh custom file"""
+        print("Bitwarden vault not unlocked!")
         print("Setting BW_SESSION files & variables...")
         self.remove_symlink(force=True)
         command = ["bw", "login", "--check"]
@@ -53,7 +64,8 @@ class WardenMyBits:
 
 def main():
     warden = WardenMyBits()
-    warden.set_bw_session()
+    if not warden.unlocked():
+        warden.set_bw_session()
 
 
 if __name__ == "__main__":
