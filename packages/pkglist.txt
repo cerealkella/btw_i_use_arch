@@ -72,6 +72,7 @@ ttf-font-awesome
 ttf-font-logos
 ttf-meslo-nerd-font-powerlevel10k
 ttf-ms-fonts
+unixodbc
 virt-viewer
 wget
 wine-mono
