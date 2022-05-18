@@ -34,6 +34,7 @@ libdbi-drivers
 libinput-gestures
 libreoffice-fresh
 libvoikko
+msodbcsql
 neofetch
 netextender
 nextcloud-client
