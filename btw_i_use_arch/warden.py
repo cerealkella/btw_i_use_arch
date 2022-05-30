@@ -1,13 +1,26 @@
 import os
 import sys
+import json
 from pathlib import PosixPath
-from subprocess import Popen, PIPE, run
+from subprocess import Popen, PIPE, run, call
 
 
 def run_command(command):
     """Runs a thing in the shell"""
     with Popen(command, stdout=PIPE, stderr=None, shell=True) as process:
         return process.communicate()[0].decode("utf-8")
+
+
+def iterate_struct(struct, match_term):
+    ix = 0
+    match = []
+    while ix < len(struct):    
+        try:
+            match.append(struct[ix][match_term])
+        except KeyError:
+            pass
+        ix += 1
+    return match
 
 
 class WardenMyBits:
@@ -61,11 +74,23 @@ class WardenMyBits:
         os.symlink("/tmp/00_bitwarden.zsh", self.omz_symlink)
         return bw_session
 
+    def get_ssh_aliases(self):
+        """gets ssh aliases"""
+        command = ["/usr/bin/bw", "list", "items", "--search", "ssh"
+        ]
+        output = run(command, capture_output=True)
+        output_json = json.loads(output.stdout.decode("utf-8"))
+        custom_fields = iterate_struct(output_json, "fields")
+        for field in custom_fields:
+            print(field)
+
+
 
 def main():
     warden = WardenMyBits()
     if not warden.unlocked():
         warden.set_bw_session()
+    # jason = warden.get_ssh_aliases()
 
 
 if __name__ == "__main__":
