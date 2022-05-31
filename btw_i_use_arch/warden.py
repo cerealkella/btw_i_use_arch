@@ -11,16 +11,42 @@ def run_command(command):
         return process.communicate()[0].decode("utf-8")
 
 
+def get_servername(match_term, uris):
+    ix = 0
+    while ix < len(uris):
+        try:
+            if uris[ix]["uri"].split()[0] == match_term:
+                return uris[ix]["uri"].split()[1]
+            ix += 1
+        except KeyError:
+            pass
+
+
 def iterate_struct(struct, match_term):
     ix = 0
-    match = []
+    array_of_aliases = []
     while ix < len(struct):    
         try:
-            match.append(struct[ix][match_term])
+            jx = 0
+            match = struct[ix]["fields"]
+            print(match)
+            # print(len(match))
+            while jx < len(match):
+                if match[jx]["name"] == "alias":
+                    alias = {"alias": match[jx]["value"],
+                             "username": struct[ix]["login"]["username"],
+                             "password": struct[ix]["login"]["password"],
+                             # "server": struct[ix]["login"]["uris"][0]["uri"],
+                             "server": get_servername("ssh", struct[ix]["login"]["uris"]), 
+                             }
+                    array_of_aliases.append(alias)
+                    # print(struct[ix]["name"])
+                    # print(array_of_aliases)
+                jx += 1
         except KeyError:
             pass
         ix += 1
-    return match
+    return array_of_aliases
 
 
 class WardenMyBits:
@@ -80,17 +106,16 @@ class WardenMyBits:
         ]
         output = run(command, capture_output=True)
         output_json = json.loads(output.stdout.decode("utf-8"))
-        custom_fields = iterate_struct(output_json, "fields")
-        for field in custom_fields:
-            print(field)
-
+        aliases = iterate_struct(output_json, "ssh")
+        for alias in aliases:
+            print(alias)
 
 
 def main():
     warden = WardenMyBits()
     if not warden.unlocked():
         warden.set_bw_session()
-    # jason = warden.get_ssh_aliases()
+    jason = warden.get_ssh_aliases()
 
 
 if __name__ == "__main__":
