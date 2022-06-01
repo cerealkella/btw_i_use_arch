@@ -58,7 +58,11 @@ class WardenMyBits:
             bw_session = run_command("bw unlock --raw")
         with open(self.tempfile, "w") as file_object:
             file_object.write(f'export BW_SESSION="{bw_session}"')
-        os.symlink("/tmp/00_bitwarden.zsh", self.omz_symlink)
+        try:
+            os.symlink("/tmp/00_bitwarden.zsh", self.omz_symlink)
+        except FileExistsError:
+            # symlink already exists
+            pass
         return bw_session
 
 
