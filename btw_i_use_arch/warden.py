@@ -1,7 +1,9 @@
 import os
 import sys
+import json
 from pathlib import PosixPath
-from subprocess import Popen, PIPE, run
+from subprocess import Popen, PIPE, run, call
+import keyring
 
 
 def run_command(command):
@@ -10,11 +12,53 @@ def run_command(command):
         return process.communicate()[0].decode("utf-8")
 
 
+def get_servername(match_term, uris):
+    ix = 0
+    while ix < len(uris):
+        try:
+            if uris[ix]["uri"].split()[0] == match_term:
+                return uris[ix]["uri"].split()[1]
+            ix += 1
+        except KeyError:
+            pass
+
+
+def iterate_struct(struct, match_term):
+    ix = 0
+    array_of_aliases = []
+    while ix < len(struct):
+        try:
+            jx = 0
+            match = struct[ix]["fields"]
+            print(match)
+            # print(len(match))
+            while jx < len(match):
+                if match[jx]["name"] == "alias":
+                    alias = {
+                        "alias": match[jx]["value"],
+                        "username": struct[ix]["login"]["username"],
+                        "password": struct[ix]["login"]["password"],
+                        # "server": struct[ix]["login"]["uris"][0]["uri"],
+                        "server": get_servername("ssh", struct[ix]["login"]["uris"]),
+                    }
+                    array_of_aliases.append(alias)
+                    # print(struct[ix]["name"])
+                    # print(array_of_aliases)
+                jx += 1
+        except KeyError:
+            pass
+        ix += 1
+    return array_of_aliases
+
+
 class WardenMyBits:
     zsh_file = "00_bitwarden.zsh"
     tempfile = PosixPath("/tmp/").joinpath(zsh_file)
     omz_symlink = (
         PosixPath("~/").expanduser().joinpath(".oh-my-zsh/custom").joinpath(zsh_file)
+    )
+    omz_aliases = (
+        PosixPath("~/").expanduser().joinpath(".oh-my-zsh/custom/50_aliases.zsh")
     )
 
     def symlink_valid(self):
@@ -65,11 +109,27 @@ class WardenMyBits:
             pass
         return bw_session
 
+    def get_ssh_aliases(self):
+        """gets ssh aliases"""
+        command = ["/usr/bin/bw", "list", "items", "--search", "ssh"]
+        output = run(command, capture_output=True)
+        output_json = json.loads(output.stdout.decode("utf-8"))
+        aliases = iterate_struct(output_json, "ssh")
+        alias_text = ""
+        for alias in aliases:
+            keyring.set_password(alias["alias"], alias["username"], alias["password"])
+            alias_text += f"""alias {alias["alias"]}="keyring get {alias["alias"]} {alias["username"]} | /usr/bin/xsel -ib && ssh {alias["server"]} -l {alias["username"]}" """
+            alias_text += "\r"
+            print(alias_text)
+        with open(self.omz_aliases, "w") as file_object:
+            file_object.write(alias_text)
+
 
 def main():
     warden = WardenMyBits()
     if not warden.unlocked():
         warden.set_bw_session()
+    jason = warden.get_ssh_aliases()
 
 
 if __name__ == "__main__":

@@ -43,9 +43,9 @@ def main(args=None):
         if getattr(btw, terminal_menu.chosen_menu_entry)() == -1:
             break
         print("Configure/install more stuff?")
-        terminal_menu = TerminalMenu(['Yes', 'No'])
+        terminal_menu = TerminalMenu(["Yes", "No"])
         terminal_menu.show()
-        do_stuff = terminal_menu.chosen_menu_entry == 'Yes'
+        do_stuff = terminal_menu.chosen_menu_entry == "Yes"
     return 0
 
 

@@ -7,6 +7,7 @@ bitwarden-cli
 code
 cura
 dbeaver
+dbus-python
 discord
 etcher
 firefox
@@ -81,6 +82,7 @@ wine-staging
 winetricks
 xclip
 xdotool
+xsel
 xf86-input-synaptics
 xournalpp
 zsh
