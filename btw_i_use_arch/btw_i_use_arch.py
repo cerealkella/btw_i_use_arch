@@ -94,13 +94,17 @@ class Install:
 
     def Install_Packages(self):
         """Install a whole lotta stuff using yay. Ensure yay is installed! (https://www.tecmint.com/install-yay-aur-helper-in-arch-linux-and-manjaro/)"""
-        return (subprocess.run("yay -S - < packages/pkglist.txt --needed", shell=True)).returncode
+        return (
+            subprocess.run("yay -S - < packages/pkglist.txt --needed", shell=True)
+        ).returncode
 
     def ZSH_Config_File_Deploy(self):
         custom_files = ["aliases.zsh", "environment.zsh"]
         for cf in custom_files:
             print(f"Copying custom file {cf} to .oh-my-zsh/custom...")
-            shutil.copyfile(src=f"config/{cf}", dst=f"{self._base_user_dir}/.oh-my-zsh/custom/{cf}")
+            shutil.copyfile(
+                src=f"config/{cf}", dst=f"{self._base_user_dir}/.oh-my-zsh/custom/{cf}"
+            )
         print("Done!")
         print("Manual edits may be necessary for the custom files to be useful!")
         return 0
@@ -150,7 +154,9 @@ class Install:
     def Install_Video_Drivers_NVIDIA_Nonfree(self):
         """(Manjaro) Install NVIDIA nonfree graphics drivers https://wiki.manjaro.org/index.php?title=Configure_Graphics_Cards"""
         if (
-            input("This will install the nonfree NVIDIA driver. Continue? (Y/N) ").lower()
+            input(
+                "This will install the nonfree NVIDIA driver. Continue? (Y/N) "
+            ).lower()
             == "y"
         ):
             print("Okay, installing the nonfree graphics driver...")
@@ -216,7 +222,10 @@ class Install:
             subprocess.run("sudo gpasswd -a $USER input", shell=True)
             print("Copying config file...")
             # subprocess.run("cp config/libinput-gestures.conf $HOME/.config", shell=True)
-            shutil.copyfile(src="config/libinput-gestures.conf", dst=f"{self._base_user_dir}/.config/libinput-gestures.conf")
+            shutil.copyfile(
+                src="config/libinput-gestures.conf",
+                dst=f"{self._base_user_dir}/.config/libinput-gestures.conf",
+            )
             print("Setting libinput-gestures to automatically start...")
             subprocess.run("libinput-gestures-setup autostart", shell=True)
             subprocess.run("libinput-gestures-setup start", shell=True)
@@ -320,7 +329,10 @@ class Install:
 
     def VirtualBox_Installation(self):
         """Optional Installation of VirtualBox, make sure kernel matches!"""
-        subprocess.run("yay -S linux510-virtualbox-host-modules virtualbox virtualbox-ext-oracle", shell=True)
+        subprocess.run(
+            "yay -S linux510-virtualbox-host-modules virtualbox virtualbox-ext-oracle",
+            shell=True,
+        )
         subprocess.run("sudo gpasswd -a $USER vboxusers", shell=True)
         print("Reboot for the changes to take effect!")
         return 0
