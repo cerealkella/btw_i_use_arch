@@ -3,5 +3,11 @@
     "terminal.integrated.fontFamily": "MesloLGS NF",
     "editor.fontFamily": "Fira Code",
     "editor.fontLigatures": true,
-    "workbench.colorTheme": "One Dark Pro"
+    "workbench.colorTheme": "One Dark Pro",
+    "python.formatting.provider": "black",
+    "editor.formatOnSave": true,
+    "python.linting.flake8Args": [
+        "--max-line-length=120",
+        "--ignore=E402,F841,F401,E302,E305"
+    ]
 }
