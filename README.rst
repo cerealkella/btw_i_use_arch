@@ -24,7 +24,7 @@ Helper menu-driven CLI for installing packages and setting up Linux components o
 Arch-based system.
 If performing a clean install - ALWAYS RUN PACMAN SYSTEM UPDATES FIRST!
 Disclaimer: I have built precisely one Arch system and spend the majority of my time 
-using Manjaro variants, which suit my needs nicely. I like Arch! But I think I might 
+using Manjaro KDE, which suits my needs nicely. I like Arch! But I think I might 
 actually prefer Manjaro. This package works equally well for either distro. 
 
 
