@@ -23,10 +23,9 @@ BTW I Use Arch
 Helper menu-driven CLI for installing packages and setting up Linux components on an 
 Arch-based system.
 If performing a clean install - ALWAYS RUN PACMAN SYSTEM UPDATES FIRST!
-Disclaimer: As of the initial deployment of this package,
-I have never actually tried to build myself an Arch system, so please don't
-tell me I'm a no-nothing n00b. In many respects I am, but don't tell me. :)
-Manjaro suits my needs quite nicely, and I like it with KDE.
+Disclaimer: I have built precisely one Arch system and spend the majority of my time 
+using Manjaro variants, which suit my needs nicely. I like Arch! But I think I might 
+actually prefer Manjaro. This package works equally well for either distro. 
 
 
 * Free software: MIT license
