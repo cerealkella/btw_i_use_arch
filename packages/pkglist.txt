@@ -54,6 +54,7 @@ rdesktop
 remmina
 remmina-plugin-rdesktop
 screen
+sddm-kcm
 sdl_mixer
 sdl_ttf
 signal-desktop
