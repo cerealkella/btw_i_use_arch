@@ -2,7 +2,7 @@ import os
 import sys
 import json
 from pathlib import PosixPath
-from subprocess import Popen, PIPE, run, call
+from subprocess import Popen, PIPE, run
 import keyring
 
 
@@ -129,7 +129,7 @@ def main():
     warden = WardenMyBits()
     if not warden.unlocked():
         warden.set_bw_session()
-    jason = warden.get_ssh_aliases()
+    # warden.get_ssh_aliases()
 
 
 if __name__ == "__main__":
