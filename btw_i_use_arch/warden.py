@@ -1,7 +1,10 @@
 import os
+import tempfile
 import sys
 import json
-from pathlib import PosixPath
+from pathlib import Path, PosixPath
+from appdirs import AppDirs
+from uuid import uuid4
 from subprocess import Popen, PIPE, run
 import keyring
 
@@ -51,9 +54,21 @@ def iterate_struct(struct, match_term):
     return array_of_aliases
 
 
+def get_datadir() -> Path:
+    """Find datadir, create it if it doesn't exist"""
+    datadir = Path(AppDirs(__package__).user_data_dir)
+    try:
+        datadir.mkdir(parents=True)
+    except FileExistsError:
+        pass
+    return datadir
+
+
 class WardenMyBits:
     zsh_file = "00_bitwarden.zsh"
-    tempfile = PosixPath("/tmp/").joinpath(zsh_file)
+    mp_file = f"{uuid4().hex}.txt"
+    temp_zsh_file = PosixPath(tempfile.gettempdir()).joinpath(zsh_file)
+    temp_mp_file = get_datadir().joinpath(mp_file)
     omz_symlink = (
         PosixPath("~/").expanduser().joinpath(".oh-my-zsh/custom").joinpath(zsh_file)
     )
@@ -61,10 +76,25 @@ class WardenMyBits:
         PosixPath("~/").expanduser().joinpath(".oh-my-zsh/custom/50_aliases.zsh")
     )
 
+    def unlock_vault(self):
+        """Writes out a password file, unlocks vault, & promptly deletes the file
+        requires the BitWarden Master Password to be stored in the keyring
+        Run the following, with "bw_mp" set as the service_name and "bitwarden.com"
+        as the username (username is not needed):
+        import keyring
+        keyring.set_password('bw_mp', 'bitwarden.com', 'your long super secure pw')
+        """
+        with open(self.temp_mp_file, "w") as file_object:
+            file_object.write(keyring.get_password("bw_mp", "bitwarden.com"))
+            file_object.close()
+        bw_session = run_command(f"bw unlock --passwordfile {self.temp_mp_file} --raw")
+        os.remove(self.temp_mp_file)
+        return bw_session
+
     def symlink_valid(self):
         """Determines if bitwarden temp file exists and has a valid symlink"""
-        if self.tempfile.is_file() and self.omz_symlink.is_file():
-            return self.omz_symlink.resolve() == self.tempfile
+        if self.temp_zsh_file.is_file() and self.omz_symlink.is_file():
+            return self.omz_symlink.resolve() == self.temp_zsh_file
         else:
             return False
 
@@ -95,12 +125,16 @@ class WardenMyBits:
         command = ["bw", "login", "--check"]
         output = run(command, capture_output=True)
         if output.stderr.decode("utf-8") == "You are not logged in.":
+            # ensure API keys are stored in environment variables
+            # Copy keys from Bitwarden Vault to custom zsh file
+            # ~/.oh-my-zsh/custom/1_environment.zsh
+            # https://bitwarden.com/help/personal-api-key/
             print("Logging in...")
-            bw_session = run_command("bw login --raw")
+            run_command("bw login --apikey")
         else:
             print("Logged in, unlocking BitWarden session...")
-            bw_session = run_command("bw unlock --raw")
-        with open(self.tempfile, "w") as file_object:
+        bw_session = self.unlock_vault()
+        with open(self.temp_zsh_file, "w") as file_object:
             file_object.write(f'export BW_SESSION="{bw_session}"')
         try:
             os.symlink("/tmp/00_bitwarden.zsh", self.omz_symlink)
