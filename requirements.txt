@@ -3,3 +3,4 @@ Click>=7.1.2
 keyring>=23.5.1
 requests>=2.26.0
 simple-term-menu>=1.0.1
+appdirs>=1.4.4
