@@ -133,11 +133,19 @@ class WardenMyBits:
             print("Valid symlink, not removing!")
 
     def unlocked(self):
-        unlock_check = ["bw", "sync"]
-        if (
-            run(unlock_check, capture_output=True).stdout.decode("utf-8")
-            == "Syncing complete."
-        ):
+        unlock_check = ["bw", "unlock", "--check"]
+        result = run(unlock_check, capture_output=True).stdout.decode("utf-8")
+        print(result)
+        if result == "Vault is unlocked!":
+            return True
+        else:
+            return False
+
+    def sync_vault(self):
+        sync_cmd = ["bw", "sync"]
+        result = run(sync_cmd, capture_output=True).stdout.decode("utf-8")
+        print(result)
+        if result == "Syncing complete.":
             return True
         else:
             return False
@@ -179,7 +187,7 @@ class WardenMyBits:
             keyring.set_password(alias["alias"], alias["username"], alias["password"])
             alias_text += f"""alias {alias["alias"]}="keyring get {alias["alias"]} {alias["username"]} | /usr/bin/xsel -ib && ssh {alias["server"]} -l {alias["username"]}" """
             alias_text += "\r"
-            print(alias_text)
+            # print(alias_text)
         with open(self.omz_aliases, "w") as file_object:
             file_object.write(alias_text)
 
@@ -188,7 +196,6 @@ def main():
     warden = WardenMyBits()
     if not warden.unlocked():
         warden.set_bw_session()
-    # warden.get_ssh_aliases()
 
 
 if __name__ == "__main__":
