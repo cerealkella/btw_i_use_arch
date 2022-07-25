@@ -151,8 +151,8 @@ class WardenMyBits:
         output = run(command, capture_output=True)
         if output.stderr.decode("utf-8") == "You are not logged in.":
             # ensure API keys are stored in environment variables
-            # Copy keys from Bitwarden Vault to custom zsh file
-            # ~/.oh-my-zsh/custom/1_environment.zsh
+            # Copy keys from Bitwarden Vault to a custom zsh file, e.g.
+            # ~/.oh-my-zsh/custom/10_environment.zsh
             # https://bitwarden.com/help/personal-api-key/
             print("Logging in...")
             run_command("bw login --apikey")

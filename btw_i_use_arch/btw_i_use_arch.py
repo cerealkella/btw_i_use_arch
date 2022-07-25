@@ -99,7 +99,7 @@ class Install:
         ).returncode
 
     def ZSH_Config_File_Deploy(self):
-        custom_files = ["aliases.zsh", "environment.zsh"]
+        custom_files = ["40_aliases.zsh", "10_environment.zsh"]
         for cf in custom_files:
             print(f"Copying custom file {cf} to .oh-my-zsh/custom...")
             shutil.copyfile(
