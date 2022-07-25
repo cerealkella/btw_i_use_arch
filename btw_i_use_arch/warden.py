@@ -6,13 +6,18 @@ from pathlib import Path, PosixPath
 from appdirs import AppDirs
 from uuid import uuid4
 from subprocess import Popen, PIPE, run
+from getpass import getpass
 import keyring
 
 
 def run_command(command):
     """Runs a thing in the shell"""
-    with Popen(command, stdout=PIPE, stderr=None, shell=True) as process:
-        return process.communicate()[0].decode("utf-8")
+    with Popen(command, stdout=PIPE, stderr=PIPE, shell=True) as process:
+        output = process.communicate()
+        if len(output[0]) > 0:
+            return output[0].decode("utf-8")
+        else:
+            return output[1].decode("utf-8")
 
 
 def get_servername(match_term, uris):
@@ -76,6 +81,13 @@ class WardenMyBits:
         PosixPath("~/").expanduser().joinpath(".oh-my-zsh/custom/50_aliases.zsh")
     )
 
+    def keyring_master_password(self):
+        # sets and gets master password in secure keyring
+        keyring.set_password(
+            "bw_mp", "bitwarden.com", getpass("Enter your Master Password: ")
+        )
+        return keyring.get_password("bw_mp", "bitwarden.com")
+
     def unlock_vault(self):
         """Writes out a password file, unlocks vault, & promptly deletes the file
         requires the BitWarden Master Password to be stored in the keyring
@@ -84,11 +96,24 @@ class WardenMyBits:
         import keyring
         keyring.set_password('bw_mp', 'bitwarden.com', 'your long super secure pw')
         """
-        with open(self.temp_mp_file, "w") as file_object:
-            file_object.write(keyring.get_password("bw_mp", "bitwarden.com"))
-            file_object.close()
-        bw_session = run_command(f"bw unlock --passwordfile {self.temp_mp_file} --raw")
-        os.remove(self.temp_mp_file)
+        bw_session = ""
+        mp = ""
+        count = 0
+        while (
+            mp in (None, "") or bw_session == "Invalid master password."
+        ) and count < 3:
+            mp = keyring.get_password("bw_mp", "bitwarden.com")
+            if mp is None or bw_session == "Invalid master password.":
+                mp = self.keyring_master_password()
+            with open(self.temp_mp_file, "w") as file_object:
+                file_object.write(mp)
+                file_object.close()
+            bw_session = run_command(
+                f"bw unlock --passwordfile {self.temp_mp_file} --raw"
+            )
+            os.remove(self.temp_mp_file)
+            count += 1
+        del mp
         return bw_session
 
     def symlink_valid(self):
