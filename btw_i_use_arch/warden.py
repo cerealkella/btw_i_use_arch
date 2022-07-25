@@ -38,8 +38,6 @@ def iterate_struct(struct, match_term):
         try:
             jx = 0
             match = struct[ix]["fields"]
-            print(match)
-            # print(len(match))
             while jx < len(match):
                 if match[jx]["name"] == "alias":
                     alias = {
@@ -80,6 +78,7 @@ class WardenMyBits:
     omz_aliases = (
         PosixPath("~/").expanduser().joinpath(".oh-my-zsh/custom/50_aliases.zsh")
     )
+    bw_session = os.getenv("BW_SESSION")
 
     def keyring_master_password(self):
         # sets and gets master password in secure keyring
@@ -96,25 +95,23 @@ class WardenMyBits:
         import keyring
         keyring.set_password('bw_mp', 'bitwarden.com', 'your long super secure pw')
         """
-        bw_session = ""
         mp = ""
         count = 0
         while (
-            mp in (None, "") or bw_session == "Invalid master password."
+            mp in (None, "") or self.bw_session == "Invalid master password."
         ) and count < 3:
             mp = keyring.get_password("bw_mp", "bitwarden.com")
-            if mp is None or bw_session == "Invalid master password.":
+            if mp is None or self.bw_session == "Invalid master password.":
                 mp = self.keyring_master_password()
             with open(self.temp_mp_file, "w") as file_object:
                 file_object.write(mp)
                 file_object.close()
-            bw_session = run_command(
+            self.bw_session = run_command(
                 f"bw unlock --passwordfile {self.temp_mp_file} --raw"
             )
             os.remove(self.temp_mp_file)
             count += 1
         del mp
-        return bw_session
 
     def symlink_valid(self):
         """Determines if bitwarden temp file exists and has a valid symlink"""
@@ -132,10 +129,18 @@ class WardenMyBits:
         else:
             print("Valid symlink, not removing!")
 
-    def unlocked(self):
-        unlock_check = ["bw", "unlock", "--check"]
+    def unlocked(self, pass_session_key=False):
+        if pass_session_key:
+            unlock_check = [
+                "bw",
+                "unlock",
+                "--check",
+                "--session",
+                f'"{self.bw_session}"',
+            ]
+        else:
+            unlock_check = ["bw", "unlock", "--check"]
         result = run(unlock_check, capture_output=True).stdout.decode("utf-8")
-        print(result)
         if result == "Vault is unlocked!":
             return True
         else:
@@ -166,19 +171,29 @@ class WardenMyBits:
             run_command("bw login --apikey")
         else:
             print("Logged in, unlocking BitWarden session...")
-        bw_session = self.unlock_vault()
+        self.unlock_vault()
         with open(self.temp_zsh_file, "w") as file_object:
-            file_object.write(f'export BW_SESSION="{bw_session}"')
+            file_object.write(f'export BW_SESSION="{self.bw_session}"')
         try:
             os.symlink("/tmp/00_bitwarden.zsh", self.omz_symlink)
         except FileExistsError:
             # symlink already exists
             pass
-        return bw_session
 
-    def get_ssh_aliases(self):
+    def get_ssh_aliases(self, pass_session_key=False):
         """gets ssh aliases"""
-        command = ["/usr/bin/bw", "list", "items", "--search", "ssh"]
+        if not pass_session_key:
+            command = ["/usr/bin/bw", "list", "items", "--search", "ssh"]
+        else:
+            command = [
+                "/usr/bin/bw",
+                "list",
+                "items",
+                "--search",
+                "ssh",
+                "--session",
+                f'"{self.bw_session}"',
+            ]
         output = run(command, capture_output=True)
         output_json = json.loads(output.stdout.decode("utf-8"))
         aliases = iterate_struct(output_json, "ssh")
@@ -196,6 +211,8 @@ def main():
     warden = WardenMyBits()
     if not warden.unlocked():
         warden.set_bw_session()
+    if warden.unlocked(True):
+        warden.get_ssh_aliases(True)
 
 
 if __name__ == "__main__":
