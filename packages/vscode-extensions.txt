@@ -1,11 +1,13 @@
 adpyke.codesnap
 batisteo.vscode-django
+bungcip.better-toml
 eamodio-gitlens
 grapecity.gc-excelviewer
 ilich8086.Untabify
 James-Yu.latex-workshop
 jcbuisson.vue
 lextudio.restructuredtext
+mkhl.direnv
 ms-python.python
 ms-toolsai.jupyter
 mxtr.sqltools
