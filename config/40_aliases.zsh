@@ -1,5 +1,5 @@
 # updates!
-alias updoots="yay -Syyu"
+alias updoots="yay -Syyu --sudoloop"
 
 # Source Reload
 alias sourcemyshit="source ~/.zshrc"
