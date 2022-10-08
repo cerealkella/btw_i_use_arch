@@ -41,6 +41,7 @@ netextender
 nextcloud-client
 nodejs
 nomacs
+noto-fonts-emoji
 obs-studio
 openssh
 pandoc
