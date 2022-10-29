@@ -9,7 +9,7 @@ cura
 dbeaver
 dbus-python
 discord
-etcher
+etcher-bin
 firefox
 firefox-dark-reader
 firefox-extension-bitwarden
