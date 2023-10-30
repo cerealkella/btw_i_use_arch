@@ -106,3 +106,5 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 export WORKON_HOME=~/.virtualenvs
 source /usr/bin/virtualenvwrapper_lazy.sh
+# For Ubuntu-based systems, virtualenvwrapper is here:
+# usr/share/virtualenvwrapper/virtualenvwrapper.sh
