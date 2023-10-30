@@ -159,6 +159,8 @@ Issues I've encountered + Fixes
      - epifonts was causing a conflict with Helvetica (\ ``yay -R epifonts``\ )
    * - Spotify Problem importing key
      - Run this: ``curl -sS https://download.spotify.com/debian/pubkey.gpg | gpg --import -`` and choose No when yay asks to import key during installation
+   * - Slow Wi-Fi
+     - https://wiki.archlinux.org/title/NetworkManager#Using_iwd_as_the_Wi-Fi_backend - set iwd as Wi-Fi Backend
 
 
 Credits
