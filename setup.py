@@ -10,7 +10,14 @@ with open("README.rst") as readme_file:
 with open("HISTORY.rst") as history_file:
     history = history_file.read()
 
-requirements = ["Click>=7.0", "wget", "simple-term-menu"]
+requirements = [
+    "Click>=7.0",
+    "simple-term-menu",
+    "keyring>=23.5.1",
+    "requests>=2.26.0",
+    "simple-term-menu>=1.0.1",
+    "appdirs>=1.4.4",
+]
 
 setup_requirements = [
     "pytest-runner",
