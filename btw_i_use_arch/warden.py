@@ -45,7 +45,9 @@ def iterate_struct(struct, match_term):
                         "username": struct[ix]["login"]["username"],
                         "password": struct[ix]["login"]["password"],
                         # "server": struct[ix]["login"]["uris"][0]["uri"],
-                        "server": get_servername("ssh", struct[ix]["login"]["uris"]),
+                        "server": get_servername(
+                            match_term, struct[ix]["login"]["uris"]
+                        ),
                     }
                     array_of_aliases.append(alias)
                     # print(struct[ix]["name"])
