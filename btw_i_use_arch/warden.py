@@ -81,6 +81,7 @@ class WardenMyBits:
         PosixPath("~/").expanduser().joinpath(".oh-my-zsh/custom/50_aliases.zsh")
     )
     bw_session = os.getenv("BW_SESSION")
+    xdg_session = os.getenv("XDG_SESSION_TYPE")
 
     def keyring_master_password(self):
         # sets and gets master password in secure keyring
@@ -196,13 +197,17 @@ class WardenMyBits:
                 "--session",
                 f'"{self.bw_session}"',
             ]
+        if self.xdg_session == "wayland":
+            clipboard_cmd = "/usr/bin/wl-copy"
+        else:
+            clipboard_cmd = "/usr/bin/xsel -ib"
         output = run(command, capture_output=True)
         output_json = json.loads(output.stdout.decode("utf-8"))
         aliases = iterate_struct(output_json, "ssh")
         alias_text = ""
         for alias in aliases:
             keyring.set_password(alias["alias"], alias["username"], alias["password"])
-            alias_text += f"""alias {alias["alias"]}="keyring get {alias["alias"]} {alias["username"]} | /usr/bin/xsel -ib && ssh {alias["server"]} -l {alias["username"]}" """
+            alias_text += f"""alias {alias["alias"]}="keyring get {alias["alias"]} {alias["username"]} | {clipboard_cmd} && ssh {alias["server"]} -l {alias["username"]}" """
             alias_text += "\r"
             # print(alias_text)
         with open(self.omz_aliases, "w") as file_object:
