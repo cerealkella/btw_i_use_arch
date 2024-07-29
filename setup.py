@@ -17,6 +17,7 @@ requirements = [
     "requests>=2.26.0",
     "simple-term-menu>=1.0.1",
     "appdirs>=1.4.4",
+    "dotenv>=1.0.1",
 ]
 
 setup_requirements = [
