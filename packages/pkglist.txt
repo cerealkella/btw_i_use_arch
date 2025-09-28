@@ -22,7 +22,7 @@ gnucash
 google-chrome
 handbrake
 hspell
-hunspell-en_US
+hunspell-en_us
 hyphen-en
 ipscan
 jq
@@ -38,7 +38,6 @@ libvoikko
 msodbcsql
 netextender
 nextcloud-client
-nodejs
 noto-fonts-emoji
 obs-studio
 openssh
@@ -77,9 +76,6 @@ ttf-ms-fonts
 unixodbc
 virt-viewer
 wget
-wine-mono
-wine-staging
-winetricks
 wl-clipboard
 xclip
 xdotool
