@@ -47,7 +47,7 @@ pandoc
 pipx
 plasma5-applets-active-window-control
 portmidi
-postgresql
+postgresql-libs
 python-pip
 python-pygame
 python-virtualenvwrapper
