@@ -7,9 +7,9 @@ bitwarden-cli
 vscodium-insiders-bin
 cura-bin
 dbus-python
-discord
 direnv
 etcher-bin
+fastfetch
 firefox
 firefox-dark-reader
 firefox-extension-bitwarden
@@ -36,7 +36,6 @@ libinput-gestures
 libreoffice-fresh
 libvoikko
 msodbcsql
-neofetch
 netextender
 nextcloud-client
 nodejs
@@ -60,7 +59,6 @@ sdl_mixer
 sdl_ttf
 signal-desktop
 simple-scan
-spotify
 steam
 tenacity
 tesseract
