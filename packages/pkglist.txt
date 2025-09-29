@@ -5,6 +5,7 @@ beekeeper-studio-bin
 bitwarden
 bitwarden-cli
 vscodium-insiders-bin
+chromedriver
 cura-bin
 dbus-python
 direnv
